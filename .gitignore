@@ -2,6 +2,13 @@
 
 # compiled output
 /dist
+/functions/dist
+/functions/dist-server
+/functions/node_modules
+
+/firebase-debug.log
+/functions/lib
+
 /tmp
 /out-tsc
 
@@ -40,3 +47,8 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+dist-server
+prerender.html
+
+dist-server

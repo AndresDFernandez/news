@@ -1,11 +1,11 @@
 
-## Angular PWA Course - Build the future of the Web Today
+## Angular Universal Course
 
-This repository contains the code of the [Angular PWA Course - Build the future of the Web Today](https://angular-university.io/course/angular-pwa-course).
+This repository contains the code of the [Angular Universal Course](https://angular-university.io/course/angular-universal-course).
 
-This course repository is updated to Angular 4, and there is a  package-lock.json file available, for avoiding semantic versioning installation issues.
+This course repository is updated to Angular v5, and there is a  package-lock.json file available, for avoiding semantic versioning installation issues.
 
-![Angular PWA Course - Build the future of the Web Today](https://s3-us-west-1.amazonaws.com/angular-university/course-images/angular-pwa-course.png)
+![Angular Universal Course](https://s3-us-west-1.amazonaws.com/angular-university/course-images/angular-universal-small.png)
 
 
 # Installation pre-requisites
@@ -25,23 +25,23 @@ For running this project we need and npm installed on our machine. These are som
 
 With the following command the angular-cli will be installed globally in your machine:
 
-    npm install -g @angular/cli 
+    npm install -g @angular/cli
 
 
 # How To install this repository
 
 We can install the master branch using the following commands:
 
-    git clone https://github.com/angular-university/angular-pwa-course.git
-    
+    git clone https://github.com/angular-university/angular-universal-course.git
+
 This repository is made of several separate npm modules, that are installable separately. For example, to run the au-input module, we can do the following:
-    
-    cd angular-pwa-course
+
+    cd angular-universal-course
     npm install
 
 Its also possible to install the modules as usual using npm:
 
-    npm install 
+    npm install
 
 NPM 5 or above has the big advantage that if you use it you will be installing the exact same dependencies than I installed in my machine, so you wont run into issues caused by semantic versioning updates.
 
@@ -59,13 +59,13 @@ This is a small Node REST API server.
 
 To run the frontend part of our code, we will use the Angular CLI:
 
-    npm start 
+    npm start
 
 The application is visible at port 4200, but you need to use HTTPS - [https://localhost:4200](https://localhost:4200)
 
 This application uses a self-signed certificate, so you will need to accept it using the browser. If you are using Chrome, you will need to click Advanced and then choose "Proceed to localhost".
 
-# Important 
+# Important
 
 This repository has multiple branches, have a look at the beginning of each section to see the name of the branch.
 
@@ -82,6 +82,12 @@ We can checkout the remote branch and start tracking it with a local branch that
 It's also possible to download a ZIP file for a given branch,  using the branch dropdown on this page on the top left, and then selecting the Clone or Download / Download as ZIP button.
 
 # Other Courses
+
+# Angular PWA Course
+
+If you are looking for the [Angular PWA Course](https://angular-university.io/course/angular-pwa-course), the repo with the full code can be found here:
+
+![Angular PWA Course - Build the future of the Web Today](https://s3-us-west-1.amazonaws.com/angular-university/course-images/angular-pwa-course.png)
 
 # Angular Security Masterclass
 
