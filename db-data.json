@@ -2,11 +2,11 @@
   "courses": {
     "01": {
       "id": "01",
-      "description": "Angular Universal Course",
-      "iconUrl": "https://s3-us-west-1.amazonaws.com/angular-university/course-images/angular-universal-small.png",
+      "description": "Converse",
+      "iconUrl": "https://images-eu.ssl-images-amazon.com/images/I/61ctiJGmgXL._AC_SR201,266_.jpg",
       "courseListIcon": "https://angular-academy.s3.amazonaws.com/main-logo/main-page-logo-small-hat.png",
-      "longDescription": "Use Angular on the server too! Learn Angular Server-Side Rendering.",
-      "category": "BEGINNER",
+      "longDescription": "Converse Converse Chuck Taylor All Star Ox, Zapatillas Unisex",
+      "category": "SHOE",
       "lessonsCount": 10
     },
     "02": {

@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Course } from "../model/course";
 import { Observable } from "rxjs/Observable";
 import { CoursesService } from "../services/courses.service";
-import { map, tap } from 'rxjs/operators';
+import { map, tap, shareReplay, retryWhen, delayWhen } from 'rxjs/operators';
 import { NewsletterService } from '../services/newsletter.service';
 import { SwPush } from '@angular/service-worker';
 import { environment } from '../../environments/environment';
+import { createHttpObservable } from '../common/util';
+import { timer } from '../../../node_modules/rxjs/internal/observable/timer';
 
 @Component({
     selector: 'home',
@@ -13,6 +15,10 @@ import { environment } from '../../environments/environment';
     styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+
+    beginnerCourses$: Observable<Course[]>;
+
+    advancedCourses$: Observable<Course[]>;
 
     courses$: Observable<Course[]>;
 
@@ -27,10 +33,31 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.courses$ = this.coursesService.findAllCourses()
-            .pipe(
-                map(Object.values)
-            );
+        const http$ =createHttpObservable(`${CoursesService.API_URL}/products.json`);
+        
+        const courses$: Observable<Course[]> = http$
+        .pipe(
+            tap(() => console.log("HTTP request executed")),
+            map(res => Object.values(res) ),
+            shareReplay(),
+            retryWhen(errors =>
+                errors.pipe(
+                delayWhen(() => timer(2000)
+                )
+            ) )
+        );
+
+        this.beginnerCourses$ = courses$
+        .pipe(
+            map(courses => courses
+                .filter(course => course.category == 'SHOE'))
+        );
+
+        this.advancedCourses$ = courses$
+        .pipe(
+            map(courses => courses
+                .filter(course => course.category == 'ADVANCED'))
+        );
     }
 
     sendNewsletter() {

@@ -1,55 +1,36 @@
-<div class="course" *appShellNoRender>
+<div class="course">
 
-    <h2>{{course?.description}}</h2>
+    <ng-container *ngIf="(course$ | async) as course">
 
-    <img class="course-thumbnail" [src]="course?.iconUrl">
+        <h2>{{course?.description}}</h2>
 
-    <div class="spinner-container" *ngIf="dataSource.data?.length == 0">
+        <img class="course-thumbnail" [src]="course?.iconUrl">
 
-        <mat-spinner></mat-spinner>
+    </ng-container>
 
-    </div>
+    <mat-form-field class="search-bar">
 
-    <mat-table class="lessons-table mat-elevation-z8" [dataSource]="dataSource">
+        <input matInput placeholder="Type your search" #searchInput autocomplete="off">
 
-        <ng-container matColumnDef="seqNo">
+    </mat-form-field>
 
-            <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
 
-            <mat-cell *matCellDef="let lesson">{{lesson.seqNo}}</mat-cell>
+    <table class="lessons-table mat-elevation-z7" *ngIf="(lessons$ | async) as lessons">
 
-        </ng-container>
+        <thead>
+            <th>#</th>
+            <th>Description</th>
+            <th>Duration</th>
+        </thead>
 
-        <ng-container matColumnDef="description">
+        
+        <tr  *ngFor="let lesson of lessons">
+            <td class="seqno-cell">{{lesson.seqNo}}</td>
+            <td class="description-cell">{{lesson.description}}</td>
+            <td class="duration-cell">{{lesson.duration}}</td>
+        </tr>
 
-            <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-
-            <mat-cell class="description-cell"
-                      *matCellDef="let lesson">{{lesson.description}}</mat-cell>
-
-        </ng-container>
-
-        <ng-container matColumnDef="duration">
-
-            <mat-header-cell *matHeaderCellDef>Duration</mat-header-cell>
-
-            <mat-cell class="duration-cell"
-                      *matCellDef="let lesson">{{lesson.duration}}</mat-cell>
-
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-
-        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-
-    </mat-table>
-
+    </table>
 
 
 </div>
-
-
-
-
-
-

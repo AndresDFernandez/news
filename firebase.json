@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -9,12 +9,15 @@
     "rewrites": [
       {
         "source": "**",
-        "function": "ssrApp"
+        "destination": "/index.html"
       }
     ]
   },
   "functions": {
     "predeploy": "npm --prefix \"functions\" run build",
     "source": "functions"
+  },
+  "database": {
+    "rules": "database.rules.json"
   }
 }

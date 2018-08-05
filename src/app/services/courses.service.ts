@@ -12,18 +12,19 @@ import {map} from 'rxjs/operators';
 @Injectable()
 export class CoursesService {
 
-    static readonly API_URL = 'https://angular-universal-course-ebcc3.firebaseio.com';
+    static readonly API_URL = 'https://news-dfa66.firebaseio.com';
 
     constructor(private http: HttpClient) {
 
     }
 
     findCourseById(courseId: string): Observable<Course> {
-        return this.http.get<Course>(`${CoursesService.API_URL}/courses/${courseId}.json`);
+        return this.http.get<Course>(`${CoursesService.API_URL}/products/${courseId}.json`);
     }
 
     findAllCourses(): Observable<Course[]> {
-        return this.http.get<Course[]>(`${CoursesService.API_URL}/courses.json`);
+        return this.http.get<Course[]>(`${CoursesService.API_URL}/products.json`);
+        //return this.http.get<Course[]>('/api/lessons');
     }
 
     findAllCourseLessons(courseId:string): Observable<Lesson[]> {

@@ -7,3 +7,10 @@
 .course-actions {
     text-align: center;
 }
+
+mat-card img{
+    object-fit: cover; /*this makes de image in src fit to the size of specified below*/
+    width: 50%; /* Here you can use wherever you want to specify the width and also the height of the <img>*/
+    height: 50%;
+    margin-left: 20%;
+  }

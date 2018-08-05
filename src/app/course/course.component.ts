@@ -1,13 +1,25 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {Course} from '../model/course';
-import {CoursesService} from '../services/courses.service';
-import {debounceTime, distinctUntilChanged, startWith, tap, delay} from 'rxjs/operators';
-import {merge} from 'rxjs/observable/merge';
-import {fromEvent} from 'rxjs/observable/fromEvent';
+import {ActivatedRoute} from "@angular/router";
+import {Course} from "../model/course";
+import {
+    debounceTime,
+    distinctUntilChanged,
+    startWith,
+    tap,
+    delay,
+    map,
+    concatMap,
+    switchMap,
+    withLatestFrom,
+    concatAll, shareReplay
+} from 'rxjs/operators';
+import {merge, fromEvent, Observable, concat} from 'rxjs';
 import {Lesson} from '../model/lesson';
-import {Meta, Title} from '@angular/platform-browser';
+import {createHttpObservable} from '../common/util';
+import { CoursesService } from '../services/courses.service';
+import { fromPromise } from '../../../node_modules/rxjs/internal/observable/fromPromise';
+import { debug, RxJsLoggingLevel } from '../common/debug';
+//import {Store} from '../common/store.service';
 
 
 @Component({
@@ -15,51 +27,71 @@ import {Meta, Title} from '@angular/platform-browser';
     templateUrl: './course.component.html',
     styleUrls: ['./course.component.css']
 })
-export class CourseComponent implements OnInit {
+export class CourseComponent implements OnInit, AfterViewInit {
 
-    course: Course;
+    courseId:number;
 
-    dataSource: MatTableDataSource<Lesson>;
+    course$ : Observable<Course>;
 
-    displayedColumns = ['seqNo', 'description', 'duration'];
+    lessons$: Observable<Lesson[]>;
 
 
-    constructor(private route: ActivatedRoute,
-                private coursesService: CoursesService,
-                private title: Title,
-                private meta: Meta) {
+    @ViewChild('searchInput') input: ElementRef;
+
+    constructor(private route: ActivatedRoute/*, private store: Store*/) {
+
 
     }
 
-
     ngOnInit() {
 
-        this.course = this.route.snapshot.data['course'];
+        this.courseId = this.route.snapshot.params['id'];
 
-        this.dataSource = new MatTableDataSource([]);
+        this.course$ = createHttpObservable(`${CoursesService.API_URL}/products/${this.courseId }.json`);
 
-        this.coursesService.findAllCourseLessons(this.course.id)
-            .subscribe(lessons => this.dataSource.data = lessons);
+        this.lessons$ = createHttpObservable(`${CoursesService.API_URL}/lessons/${this.courseId}/.json?`)
+        .pipe(
+            map(res => res["01"])
+        );
+    }
 
-        this.title.setTitle(this.course.description);
+    ngAfterViewInit() {
 
-        this.meta.addTag({name: 'description', content: this.course.longDescription});
+        const searchLessons$ = fromEvent<any>(this.input.nativeElement, 'keyup')
+            .pipe(
+                map(event => event.target.value),
+                startWith(''),
+                debug( RxJsLoggingLevel.TRACE, "search "),
+                debounceTime(400),
+                distinctUntilChanged(),
+                switchMap(search => this.loadLessons(search)),
+                debug( RxJsLoggingLevel.DEBUG, "lessons value ")
+            );
 
-        this.meta.addTag({name: 'twitter:card', content: 'summary'});
-        this.meta.addTag({name: 'twitter:site', content: '@AngularUniv'});
-        this.meta.addTag({name: 'twitter:title', content: this.course.description});
-        this.meta.addTag({name: 'twitter:description', content: this.course.description});
-        this.meta.addTag({name: 'twitter:text:description', content: this.course.description});
-        this.meta.addTag({name: 'twitter:image', content: 'https://avatars3.githubusercontent.com/u/16628445?v=3&s=200'});
+            this.lessons$ = searchLessons$;
+    }
 
+    //https://news-dfa66.firebaseio.com/lessons/01.json?orderBy=%22description%22&startAt=%22A%22&endAt=%22A\uf8ff%22&print=pretty
+
+    loadLessons(search = ''): Observable<Lesson[]> {
+        if (search !== '') {
+            return createHttpObservable(
+                `${CoursesService.API_URL}/lessons/${this.courseId}.json?orderBy="description"&startAt="${search}"&endAt="${search}\uf8ff"`)
+                .pipe(
+                    map(res => new Array(res[0]))
+                );
+        }
+
+        return createHttpObservable(
+            `${CoursesService.API_URL}/lessons/${this.courseId}/.json?orderBy="description"`)
+            .pipe(
+                map(res => res)
+            );
 
     }
 
 
 }
-
-
-
 
 
 
