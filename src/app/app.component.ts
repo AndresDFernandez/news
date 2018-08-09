@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
+import { Store } from './common/store.service';
 
 
 @Component({
@@ -9,7 +10,7 @@ import { SwUpdate } from '@angular/service-worker';
 })
 export class AppComponent implements OnInit {
 
-    constructor(private swUpdate: SwUpdate) {
+    constructor(private swUpdate: SwUpdate, private store:Store) {
     }
 
     ngOnInit() {
@@ -23,7 +24,9 @@ export class AppComponent implements OnInit {
                     window.location.reload();
                 }
             });
-        }        
+        }
+        
+        this.store.init();
     }
 
 

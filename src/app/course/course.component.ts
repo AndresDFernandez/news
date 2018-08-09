@@ -5,21 +5,15 @@ import {
     debounceTime,
     distinctUntilChanged,
     startWith,
-    tap,
-    delay,
     map,
-    concatMap,
     switchMap,
-    withLatestFrom,
-    concatAll, shareReplay
 } from 'rxjs/operators';
 import {merge, fromEvent, Observable, concat} from 'rxjs';
 import {Lesson} from '../model/lesson';
 import {createHttpObservable} from '../common/util';
 import { CoursesService } from '../services/courses.service';
-import { fromPromise } from '../../../node_modules/rxjs/internal/observable/fromPromise';
 import { debug, RxJsLoggingLevel } from '../common/debug';
-//import {Store} from '../common/store.service';
+import { Store } from '../common/store.service';
 
 
 @Component({
@@ -29,7 +23,7 @@ import { debug, RxJsLoggingLevel } from '../common/debug';
 })
 export class CourseComponent implements OnInit, AfterViewInit {
 
-    courseId:number;
+    courseId: number;
 
     course$ : Observable<Course>;
 
@@ -38,7 +32,7 @@ export class CourseComponent implements OnInit, AfterViewInit {
 
     @ViewChild('searchInput') input: ElementRef;
 
-    constructor(private route: ActivatedRoute/*, private store: Store*/) {
+    constructor(private route: ActivatedRoute, private store: Store) {
 
 
     }
@@ -47,12 +41,7 @@ export class CourseComponent implements OnInit, AfterViewInit {
 
         this.courseId = this.route.snapshot.params['id'];
 
-        this.course$ = createHttpObservable(`${CoursesService.API_URL}/products/${this.courseId }.json`);
-
-        this.lessons$ = createHttpObservable(`${CoursesService.API_URL}/lessons/${this.courseId}/.json?`)
-        .pipe(
-            map(res => res["01"])
-        );
+        this.course$ = this.store.selectCourseById(this.courseId);
     }
 
     ngAfterViewInit() {

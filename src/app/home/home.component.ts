@@ -8,6 +8,7 @@ import { SwPush } from '@angular/service-worker';
 import { environment } from '../../environments/environment';
 import { createHttpObservable } from '../common/util';
 import { timer } from '../../../node_modules/rxjs/internal/observable/timer';
+import { Store } from '../common/store.service';
 
 @Component({
     selector: 'home',
@@ -28,37 +29,20 @@ export class HomeComponent implements OnInit {
 
     constructor(private coursesService: CoursesService,
         private swPush: SwPush,
+        private store:Store,
         private newsletterService: NewsletterService) {
 
     }
 
     ngOnInit() {
-        const http$ =createHttpObservable(`${CoursesService.API_URL}/products.json`);
-        
-        const courses$: Observable<Course[]> = http$
-        .pipe(
-            tap(() => console.log("HTTP request executed")),
-            map(res => Object.values(res) ),
-            shareReplay(),
-            retryWhen(errors =>
-                errors.pipe(
-                delayWhen(() => timer(2000)
-                )
-            ) )
-        );
 
-        this.beginnerCourses$ = courses$
-        .pipe(
-            map(courses => courses
-                .filter(course => course.category == 'SHOE'))
-        );
-
-        this.advancedCourses$ = courses$
-        .pipe(
-            map(courses => courses
-                .filter(course => course.category == 'ADVANCED'))
-        );
-    }
+            const courses$ = this.store.courses$;
+    
+            this.beginnerCourses$ = this.store.selectBeginnerCourses();
+    
+            this.advancedCourses$ = this.store.selectAdvancedCourses();
+    
+        }
 
     sendNewsletter() {
 
