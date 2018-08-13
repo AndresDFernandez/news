@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Course } from "../model/course";
-import { Observable } from "rxjs/Observable";
-import { CoursesService } from "../services/courses.service";
-import { map, tap, shareReplay, retryWhen, delayWhen } from 'rxjs/operators';
-import { NewsletterService } from '../services/newsletter.service';
-import { SwPush } from '@angular/service-worker';
-import { environment } from '../../environments/environment';
-import { createHttpObservable } from '../common/util';
-import { timer } from '../../../node_modules/rxjs/internal/observable/timer';
-import { Store } from '../common/store.service';
-
+import {Component, OnInit} from '@angular/core';
+import {Course} from "../model/course";
+import {Observable} from "rxjs";
+import {filter, map, tap, withLatestFrom} from "rxjs/operators";
+import {CoursesService} from "../services/courses.service";
+import {AppState} from '../../reducers';
+import {select, Store} from '@ngrx/store';
+import {selectAdvancedCourses, selectAllCourses, selectBeginnerCourses, selectPromoTotal} from '../course.selectors';
+import {AllCoursesRequested} from '../course.actions';
+import { SwPush } from '../../../../node_modules/@angular/service-worker';
+import { NewsletterService } from '../../services/newsletter.service';
 @Component({
     selector: 'home',
     templateUrl: './home.component.html',
@@ -17,11 +16,11 @@ import { Store } from '../common/store.service';
 })
 export class HomeComponent implements OnInit {
 
+    promoTotal$: Observable<number>;
+
     beginnerCourses$: Observable<Course[]>;
 
     advancedCourses$: Observable<Course[]>;
-
-    courses$: Observable<Course[]>;
 
     sub: PushSubscription;
 
@@ -29,20 +28,22 @@ export class HomeComponent implements OnInit {
 
     constructor(private coursesService: CoursesService,
         private swPush: SwPush,
-        private store:Store,
+        private store: Store<AppState>,
         private newsletterService: NewsletterService) {
 
     }
 
     ngOnInit() {
 
-            const courses$ = this.store.courses$;
-    
-            this.beginnerCourses$ = this.store.selectBeginnerCourses();
-    
-            this.advancedCourses$ = this.store.selectAdvancedCourses();
-    
-        }
+        this.store.dispatch(new AllCoursesRequested());
+
+        this.beginnerCourses$ = this.store.pipe(select(selectBeginnerCourses));
+
+        this.advancedCourses$ = this.store.pipe(select(selectAdvancedCourses));
+
+        this.promoTotal$ = this.store.pipe(select(selectPromoTotal));
+
+    }
 
     sendNewsletter() {
 
@@ -73,6 +74,5 @@ export class HomeComponent implements OnInit {
             .catch(err => console.error("Could not subscribe to notifications", err));
 
     }
-
 
 }

@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { Store } from './common/store.service';
+import { Observable } from '../../node_modules/rxjs/Observable';
+import { Store, select } from '../../node_modules/@ngrx/store';
+import { AppState } from './reducers';
+import { isLoggedIn, isLoggedOut } from './auth/auth.selectors';
+import { Logout } from './auth/auth.actions';
 
 
 @Component({
@@ -10,7 +14,10 @@ import { Store } from './common/store.service';
 })
 export class AppComponent implements OnInit {
 
-    constructor(private swUpdate: SwUpdate, private store:Store) {
+    isLoggedIn$: Observable<boolean>;
+    isLoggedOut$: Observable<boolean>;
+    
+    constructor(private swUpdate: SwUpdate, private store: Store<AppState>) {
     }
 
     ngOnInit() {
@@ -26,8 +33,23 @@ export class AppComponent implements OnInit {
             });
         }
         
-        this.store.init();
+       //  this.store.init();
+        this.isLoggedIn$ = this.store
+        .pipe(
+          select(isLoggedIn)
+        );
+
+      this.isLoggedOut$ = this.store
+        .pipe(
+          select(isLoggedOut)
+        );
+
     }
 
+    logout() {
 
-}
+      this.store.dispatch(new Logout());
+
+    }
+
+    }

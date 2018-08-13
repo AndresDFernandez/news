@@ -1,0 +1,43 @@
+
+<div class="courses-panel">
+
+    <h2 class="title">All Courses</h2>
+
+    <div class="buttons">
+
+        <button mat-button class="mat-raised-button mat-primary" (click)="subscribeToNotifications()" [disabled]="sub">Subscribe</button>
+
+        <button mat-button class="mat-raised-button mat-accent" (click)="sendNewsletter()">Send</button>
+
+    </div>
+    
+    <div class="counters">
+        <p>In Promo: {{promoTotal$ | async}}</p>
+    </div>
+
+    <mat-tab-group>
+
+        <mat-tab label="Beginners">
+
+            <courses-card-list
+                    [courses]="beginnerCourses$ | async">
+
+            </courses-card-list>
+
+        </mat-tab>
+
+        <mat-tab label="Advanced">
+
+            <courses-card-list
+                    [courses]="advancedCourses$ | async"
+
+            ></courses-card-list>
+
+        </mat-tab>
+
+    </mat-tab-group>
+
+
+
+</div>
+

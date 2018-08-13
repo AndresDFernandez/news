@@ -4,6 +4,8 @@ import {Application} from "express";
 import {readAllLessons} from "./read-all-lessons.route";
 import {addPushSubscriber} from "./add-push-subscriber.route";
 import {sendNewsletter} from "./send-newsletter.route";
+import {loginUser} from "./auth.route";
+
 const bodyParser = require('body-parser');
 
 const webpush = require('web-push');
@@ -30,6 +32,8 @@ app.use(bodyParser.json());
 
 
 // REST API
+app.route('/api/login')
+    .post(loginUser);
 app.route('/api/lessons')
     .get(readAllLessons);
 
