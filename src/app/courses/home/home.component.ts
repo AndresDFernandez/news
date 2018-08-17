@@ -9,10 +9,12 @@ import {selectAdvancedCourses, selectAllCourses, selectBeginnerCourses, selectPr
 import {AllCoursesRequested} from '../course.actions';
 import { SwPush } from '../../../../node_modules/@angular/service-worker';
 import { NewsletterService } from '../../services/newsletter.service';
+import { ChangeDetectionStrategy } from '../../../../node_modules/@angular/compiler/src/core';
 @Component({
     selector: 'home',
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+    styleUrls: ['./home.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
 

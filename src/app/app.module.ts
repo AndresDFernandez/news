@@ -1,7 +1,6 @@
 import {BrowserModule, BrowserTransferStateModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
-import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatMenuModule} from '@angular/material/menu';
@@ -17,16 +16,13 @@ import {
     MatTableModule,
     MatToolbarModule
 } from '@angular/material';
-import {CoursesService} from './services/courses.service';
-import {CourseResolver} from './services/course.resolver';
-import { CourseDialogComponent } from './course-dialog/course-dialog.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import { HttpClientModule} from '@angular/common/http';
 import {AppShellNoRenderDirective} from './directives/app-shell-no-render.directive';
 import {AppShellRenderDirective} from './directives/app-shell-render.directive';
 import { NewsletterService } from './services/newsletter.service';
-import {SwPush, ServiceWorkerModule} from '@angular/service-worker';
+import { ServiceWorkerModule} from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -35,7 +31,7 @@ import {RouterStateSerializer, StoreRouterConnectingModule} from '@ngrx/router-s
 import {CustomSerializer} from './shared/utils';
 import { reducers, metaReducers } from './reducers';
 import { AuthModule } from './auth/auth.module';
-import { RouterModule, Routes } from '../../node_modules/@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
@@ -53,11 +49,11 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         AppComponent,
-        CourseDialogComponent,
         AppShellNoRenderDirective,
         AppShellRenderDirective
     ],
     imports: [
+        RouterModule.forRoot(routes),
         BrowserModule.withServerTransition({ appId: 'serverApp' }),
         BrowserTransferStateModule,
         BrowserAnimationsModule,
@@ -75,13 +71,11 @@ const routes: Routes = [
         MatSortModule,
         MatProgressSpinnerModule,
         MatDialogModule,
-       // AppRoutingModule,
         MatSelectModule,
         MatDatepickerModule,
         MatMomentDateModule,
         ReactiveFormsModule,
         HttpClientModule,
-        RouterModule.forRoot(routes),
         AuthModule.forRoot(),
         ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
         StoreModule.forRoot(reducers, { metaReducers }),
@@ -90,13 +84,10 @@ const routes: Routes = [
         StoreRouterConnectingModule.forRoot({stateKey: 'router'})
     ],
     providers: [
-        CoursesService,
-        CourseResolver,
         NewsletterService,
         { provide: RouterStateSerializer, useClass: CustomSerializer }
     ],
-    bootstrap: [AppComponent],
-    entryComponents: [CourseDialogComponent]
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

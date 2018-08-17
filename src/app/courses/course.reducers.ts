@@ -34,7 +34,7 @@ export function coursesReducer(state = initialCoursesState , action: CourseActio
 
     case CourseActionTypes.CourseSaved:
 
-      return adapter.updateOne(action.payload.course,state);
+      return adapter.updateOne(action.payload.course, state);
 
     default: {
 

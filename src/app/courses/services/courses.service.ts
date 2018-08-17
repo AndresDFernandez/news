@@ -7,18 +7,10 @@ import {Course} from "../model/course";
 import {map} from "rxjs/operators";
 import {Lesson} from "../model/lesson";
 
-export class ResultType  {
-    constructor(r){
-        this.courses = r;
-    }
-    courses: Course[];
-}
 
 @Injectable()
 export class CoursesService {
 
-    static readonly API_URL = 'https://news-dfa66.firebaseio.com';
-    
     constructor(private http:HttpClient) {
 
     }
@@ -28,11 +20,10 @@ export class CoursesService {
     }
 
     findAllCourses(): Observable<Course[]> {
-
-        return this.http.get<Course[]>(`${CoursesService.API_URL}/products.json`)
-        .pipe(
-            map(res => Object.values(res))
-        )
+        return this.http.get('/api/courses')
+            .pipe(
+                map(res => res['payload'])
+            );
     }
 
     findAllCourseLessons(courseId:number): Observable<Lesson[]> {
@@ -50,11 +41,7 @@ export class CoursesService {
         courseId:number,
         pageNumber = 0, pageSize = 3):  Observable<Lesson[]> {
 
-        return this.http.get<Lesson[]>(`${CoursesService.API_URL}/lesson.json`)
-        .pipe(
-            map(res => Object.values(res))
-        );
-        /*return this.http.get('/api/lessons', {
+        return this.http.get('/api/lessons', {
             params: new HttpParams()
                 .set('courseId', courseId.toString())
                 .set('filter', '')
@@ -63,7 +50,7 @@ export class CoursesService {
                 .set('pageSize', pageSize.toString())
         }).pipe(
             map(res =>  res["payload"])
-        );*/
+        );
     }
 
 
