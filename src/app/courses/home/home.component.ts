@@ -1,15 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {Course} from "../model/course";
 import {Observable} from "rxjs";
-import {filter, map, tap, withLatestFrom} from "rxjs/operators";
 import {CoursesService} from "../services/courses.service";
 import {AppState} from '../../reducers';
 import {select, Store} from '@ngrx/store';
 import {selectAdvancedCourses, selectAllCourses, selectBeginnerCourses, selectPromoTotal} from '../course.selectors';
 import {AllCoursesRequested} from '../course.actions';
-import { SwPush } from '../../../../node_modules/@angular/service-worker';
+import { SwPush } from '@angular/service-worker';
 import { NewsletterService } from '../../services/newsletter.service';
-import { ChangeDetectionStrategy } from '../../../../node_modules/@angular/compiler/src/core';
+import { ChangeDetectionStrategy } from '@angular/core';
 @Component({
     selector: 'home',
     templateUrl: './home.component.html',

@@ -30,7 +30,7 @@ export class LessonsDataSource implements DataSource<Lesson> {
                 this.store.dispatch(new LessonsPageRequested({courseId, page}));
               }
             }),
-            catchError(() => of([]))
+            catchError((e) => of([]))
           )
           .subscribe();
 
