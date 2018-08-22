@@ -1,0 +1,18 @@
+<img class="fullBg" fullpage [src]="background">
+<mat-card class="example-card">
+  <label for="uploadPicture" class="upload-file" *ngIf="!picture">
+    <mat-icon>add_a_photo</mat-icon>
+  </label>
+  <input #fileInput type="file" id="uploadPicture" [hidden]="true" accept="image/jpeg, .jpeg, image/png, .png, image/pjpeg, .jpg"
+    (change)="onFileChange($event)">
+  <img mat-card-image [src]="picture" alt="Photo of you" *ngIf="picture">
+  <mat-card-content>
+    <h1>{{doppelganger}}</h1>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="onSubmit()">
+      <mat-icon>thumb_up</mat-icon> OK</button>
+    <button mat-button (click)="clearFile()">
+      <mat-icon>thumb_down</mat-icon> Clear</button>
+  </mat-card-actions>
+</mat-card>

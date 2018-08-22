@@ -1,0 +1,20 @@
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "ssrApp"
+      }
+    ]
+  },
+  "functions": {
+    "predeploy": "npm --prefix \"functions\" run build",
+    "source": "functions"
+  }
+}
